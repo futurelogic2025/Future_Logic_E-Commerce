@@ -51,7 +51,9 @@ class Stack {
   }
 }
 
-// ✅ Example usage
+export default Stack
+
+//Example usage
 const stack = new Stack();
 stack.push(10);
 stack.push(20);
