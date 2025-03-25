@@ -3,7 +3,7 @@ import config from "./config/config.js";
 import app from "./server/express.js";
 import { join } from "path";
 import __dirname from "./server/_dirname.js";
-import template from './template/template.js';
+import template from './public/template.js';
 
 // Import routes
 import authRoutes from './server/routes/auth.Routes.js';
