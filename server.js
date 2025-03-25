@@ -3,8 +3,14 @@ import config from "./config/config.js";
 import app from "./server/express.js";
 import { join } from "path";
 import __dirname from "./server/_dirname.js";
-
 import template from './template/template.js';
+
+// Import routes
+import userRoutes from './routes/userRoutes';
+import transactionRoutes from './routes/transactionRoutes';
+import messageRoutes from './routes/messageRoutes';
+import reviewRoutes from './routes/reviewRoutes';
+import productRoutes from './routes/productRoutes';
 
 //mongoose
 // import mongoose from "mongoose";
@@ -38,14 +44,18 @@ app.use((req, res) => {
     res.redirect('/');
 });
 
-app.get("/api/v1", (req, res) => {
-  res.json({
-    project: "React and Express Boilerplate",
-    from: "Vanaldito",
-  });
-});
+// Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-//----app listening------
+// API Routes
+app.use('/users', userRoutes);
+app.use('/transactions', transactionRoutes);
+app.use('/messages', messageRoutes);
+app.use('/reviews', reviewRoutes);
+app.use('/products', productRoutes);
+
+// ----app listening------
 app.listen(config.port, (err) => {
   if (err) {
     console.log(err);

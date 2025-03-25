@@ -1,0 +1,133 @@
+import { firestore as _firestore } from '../config/firebaseConfig.js';
+import { verifyPassword, generateJwtToken } from './auth.Controller.js';
+
+// Reference Firestore
+const firestore = _firestore();
+
+// User sign-in and JWT generation
+export async function signIn(req, res) {
+  try {
+    const { email, password } = req.body;
+    const firestore = admin.firestore();
+
+    // Find user by email in Firestore
+    const userSnapshot = await firestore.collection('users').where('email', '==', email).get();
+
+    if (userSnapshot.empty) {
+      return res.status(404).send({ message: 'User not found' });
+    }
+
+    const user = userSnapshot.docs[0].data();
+
+    // Verify the password using crypto
+    const passwordMatch = verifyPassword(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).send({ message: 'Invalid email or password' });
+    }
+
+    // Generate JWT token
+    const token = generateJwtToken(user);
+
+    res.status(200).send({ message: 'Sign-in successful', token });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}
+
+// Create a new user
+export async function createUser(req, res) {
+  try {
+    // Step 1: Generate a unique user ID from Firebase Auth
+    const { email, password, ...userData } = req.body; // Separate email and password for Firebase Auth
+    const userRecord = await auth().createUser({ email, password });
+
+    // Step 2: Include the generated user_id in the user object
+    const user_id = userRecord.uid;
+    const completeUserData = { ...userData, user_id };
+
+    // Step 3: Add the user object to Firestore
+    const userRef = await firestore.collection('users').doc(user_id).set(completeUserData);
+
+    res.status(201).send({ message: 'User created successfully', userId: user_id });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}
+
+// Get a specific user by ID
+export async function getUser(req, res) {
+  try {
+    const userId = req.params.id;
+    const userDoc = await firestore.collection('users').doc(userId).get();
+
+    if (!userDoc.exists) {
+      return res.status(404).send({ message: 'User not found' });
+    }
+
+    res.status(200).send({ id: userDoc.id, ...userDoc.data() });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}
+
+// Update a user's details by ID
+export async function updateUser(req, res) {
+  try {
+    const userId = req.params.id;
+    const updates = req.body;
+
+    // Check if user exists
+    const userRef = firestore.collection('users').doc(userId);
+    const userDoc = await userRef.get();
+    if (!userDoc.exists) {
+      return res.status(404).send({ message: 'User not found' });
+    }
+
+    await userRef.update(updates);
+    res.status(200).send({ message: 'User updated successfully' });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}
+
+// Delete a user by ID
+export async function deleteUser(req, res) {
+  try {
+    const userId = req.params.id;
+
+    // Delete from Firebase Auth
+    await auth().deleteUser(userId);
+
+    // Delete from Firestore
+    const userRef = firestore.collection('users').doc(userId);
+    const userDoc = await userRef.get();
+    if (!userDoc.exists) {
+      return res.status(404).send({ message: 'User not found' });
+    }
+
+    await userRef.delete();
+    res.status(200).send({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}
+
+// Get all users
+export async function getAllUsers(req, res) {
+  try {
+    const userSnapshot = await firestore.collection('users').get();
+
+    if (userSnapshot.empty) {
+      return res.status(404).send({ message: 'No users found' });
+    }
+
+    const users = [];
+    userSnapshot.forEach(doc => {
+      users.push({ id: doc.id, ...doc.data() });
+    });
+
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}
