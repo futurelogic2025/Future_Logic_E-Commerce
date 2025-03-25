@@ -51,3 +51,13 @@ export function verifyPassword(password, storedPassword) {
   const hash = pbkdf2Sync(password, salt, HASH_ITERATIONS, HASH_LENGTH, HASH_ALGORITHM).toString('hex'); // Hash the provided password with the original salt
   return hash === originalHash; // Check if the hashes match
 }
+
+// Middleware to handle user sign-out (optional for stateless JWT systems)
+export function signOut(req, res) {
+  try {
+    // Invalidate token (this is handled client-side by simply removing the token)
+    res.status(200).send({ message: 'Sign-out successful. Please delete the token on the client side.' });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}

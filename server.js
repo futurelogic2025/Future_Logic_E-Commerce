@@ -6,11 +6,12 @@ import __dirname from "./server/_dirname.js";
 import template from './template/template.js';
 
 // Import routes
-import userRoutes from './routes/userRoutes';
-import transactionRoutes from './routes/transactionRoutes';
-import messageRoutes from './routes/messageRoutes';
-import reviewRoutes from './routes/reviewRoutes';
-import productRoutes from './routes/productRoutes';
+import authRoutes from './server/routes/auth.Routes.js';
+import userRoutes from './server/routes/user.Routes.js';
+import transactionRoutes from './server/routes/transaction.Routes.js';
+import messageRoutes from './server/routes/message.Routes.js';
+import reviewRoutes from './server/routes/review.Routes.js';
+import productRoutes from './server/routes/product.Routes.js';
 
 //mongoose
 // import mongoose from "mongoose";
@@ -34,7 +35,6 @@ import productRoutes from './routes/productRoutes';
 // app.use("/", static_(join(__dirname, "public")));
 
 
-
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to User application." });
 });
@@ -48,12 +48,15 @@ app.use((req, res) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
 // API Routes
+app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/transactions', transactionRoutes);
 app.use('/messages', messageRoutes);
 app.use('/reviews', reviewRoutes);
 app.use('/products', productRoutes);
+
 
 // ----app listening------
 app.listen(config.port, (err) => {
