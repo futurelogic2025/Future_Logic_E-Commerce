@@ -1,5 +1,5 @@
-import { verify, sign } from 'jsonwebtoken';
 import { randomBytes, pbkdf2Sync } from 'crypto';
+import JWT from 'jsonwebtoken';
 
 // Secret key for signing JWT tokens (store securely in environment variables)
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
@@ -18,7 +18,7 @@ export function verifyJwtToken(req, res, next) {
     }
 
     const token = authHeader.split(' ')[1]; // Extract the JWT token
-    const decodedToken = verify(token, JWT_SECRET); // Verify the token
+    const decodedToken = JWT.verify(token, JWT_SECRET); // Verify the token
 
     req.user = decodedToken; // Attach decoded payload to the request object
     next();
@@ -35,7 +35,7 @@ export function generateJwtToken(user) {
     role: user.role,
   };
 
-  return sign(payload, JWT_SECRET, { expiresIn: '1h' }); // Token expires in 1 hour
+  return JWT.sign(payload, JWT_SECRET, { expiresIn: '1h' }); // Token expires in 1 hour
 }
 
 // Hash a password using crypto

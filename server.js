@@ -13,6 +13,7 @@ import messageRoutes from './server/routes/message.Routes.js';
 import reviewRoutes from './server/routes/review.Routes.js';
 import productRoutes from './server/routes/product.Routes.js';
 
+
 //mongoose
 // import mongoose from "mongoose";
 // mongoose.Promise = global.Promise;
@@ -44,11 +45,6 @@ app.use((req, res) => {
     res.redirect('/');
 });
 
-// Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-
 // API Routes
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
@@ -56,6 +52,22 @@ app.use('/transactions', transactionRoutes);
 app.use('/messages', messageRoutes);
 app.use('/reviews', reviewRoutes);
 app.use('/products', productRoutes);
+
+
+//testing firebase
+import gDB from './server/config/firebaseConfig.js';
+
+// const { db } = require('./config/firebase');
+
+async function testFirestore() {
+  const testDocRef = gDB.db.collection('test').doc('testDoc');
+  await testDocRef.set({ message: 'Hello, Firebase!' });
+  const doc = await testDocRef.get();
+  console.log(doc.data()); // Should log the test message
+}
+
+testFirestore();
+
 
 
 // ----app listening------

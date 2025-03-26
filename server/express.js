@@ -4,7 +4,6 @@ import cookieParser from "cookie-parser";
 import compress from "compression";
 import cors from "cors";
 import helmet from "helmet";
-import authRoutes from "./routes/auth.Routes.js";
 import morgan from "morgan";
 
 const app = express();
@@ -19,10 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(morgan("dev"));
-
-//routes
-app.use("/", authRoutes);
-app.use("/", userRoutes);
 
 app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {

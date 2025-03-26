@@ -1,14 +1,14 @@
-import { firestore as _firestore } from '../config/firebaseConfig.js';
 import { verifyPassword, generateJwtToken } from './auth.Controller.js';
+import gDB from '../config/firebaseConfig.js';
 
 // Reference Firestore
-const firestore = _firestore();
+const firestore = gDB.db;
 
 // User sign-in and JWT generation
 export async function signIn(req, res) {
   try {
     const { email, password } = req.body;
-    const firestore = admin.firestore();
+    // const firestore = admin.firestore();
 
     // Find user by email in Firestore
     const userSnapshot = await firestore.collection('users').where('email', '==', email).get();

@@ -1,7 +1,7 @@
-import { firestore as _firestore } from '../config/firebaseConfig.js';
+import gDB from '../config/firebaseConfig.js';
 
 // Reference Firestore
-const firestore = _firestore();
+const firestore = gDB.db;
 
 // Create a new review
 export async function createReview(req, res) {
