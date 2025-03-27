@@ -46,12 +46,14 @@ app.get("/", (req, res) => {
 // });
 
 // API Routes
-app.use('/auth', authRoutes);
-app.use('/users', userRoutes);
-app.use('/transactions', transactionRoutes);
-app.use('/messages', messageRoutes);
-app.use('/reviews', reviewRoutes);
-app.use('/products', productRoutes);
+const apiVersion = "apiv1.0.0";
+
+app.use(`/${apiVersion}/auth`, authRoutes);
+app.use(`/${apiVersion}/users`, userRoutes);
+app.use(`/${apiVersion}/transactions`, transactionRoutes);
+app.use(`/${apiVersion}/messages`, messageRoutes);
+app.use(`/${apiVersion}/reviews`, reviewRoutes);
+app.use(`/${apiVersion}/products`, productRoutes);
 
 
 //testing firebase
