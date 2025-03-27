@@ -57,8 +57,6 @@ app.use('/products', productRoutes);
 //testing firebase
 import gDB from './server/config/firebaseConfig.js';
 
-// const { db } = require('./config/firebase');
-
 async function testFirestore() {
   const testDocRef = gDB.db.collection('test').doc('testDoc');
   await testDocRef.set({ message: 'Hello, Firebase!' });
@@ -67,7 +65,6 @@ async function testFirestore() {
 }
 
 testFirestore();
-
 
 
 // ----app listening------

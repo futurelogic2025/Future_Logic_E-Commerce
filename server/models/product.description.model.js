@@ -1,13 +1,15 @@
+import ContentContext from "./content.text.model.js";
+
 class ProductDescription {
   constructor(short, long, specs, features) {
     if (typeof specs !== 'object' || specs === null) {
       throw new Error('Invalid specs: must be a non-null object.');
     }
 
-    this.short = short; // Short description for preview displays
-    this.long = long; // Detailed description for the product page
-    this.specs = specs; // Specifications as a JS object (e.g., dimensions, weight, color)
-    this.features = features || []; // Array of key product features
+    this.short = new ContentContext(short); // Short description for preview displays
+    this.long = new ContentContext(long); // Detailed description for the product page
+    this.specs = new ContentContext(specs); // Specifications as a JS object (e.g., dimensions, weight, color)
+    this.features = features || new ContentContext([]); // Array of key product features
   }
 
   // Method to update product description details

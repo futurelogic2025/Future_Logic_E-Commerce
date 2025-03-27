@@ -1,3 +1,5 @@
+import ContentContext from "./content.text.model.js";
+
 class Product {
   constructor(
     product_id,
@@ -10,7 +12,7 @@ class Product {
   ) {
     this.product_id = product_id; // Primary Key: Unique identifier for the product
     this.name = name; // Product name
-    this.description = description; // JSON object for product description
+    this.description = new ContentContext(description); // JSON object for product description. Contains product pictures
     this.price = price; // Current product price
     this.stock_quantity = stock_quantity; // Available stock
     this.category_id = category_id; // Foreign Key: Links to Categories

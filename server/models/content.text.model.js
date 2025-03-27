@@ -1,26 +1,25 @@
 import { Stack } from "./stack.model.js";
 
-class ContentText {
-  constructor(text){
+class ContentContext {
+  constructor(text) {
     this.latest = text;
-    this.archive = new Stack;
+    this.archive = new Stack();
   }
 
-  #_update_ContentText = (message, newlatest) => {
-    if(message.latest){
+  #_update_Content = (message, newlatest) => {
+    if (message.latest) {
       message.archive.push(message.latest);
     }
-    message.latest = newlatest
+    message.latest = newlatest;
+  };
+
+  setLatest(newlatest) {
+    this.#_update_Content(this, newlatest);
   }
 
-  setLatest(newlatest){
-    this.#_update_ContentText(this, newlatest);
+  asArray() {
+    return [...this.archive.toArray(), this.latest];
   }
-
-  asArray(){
-    return this.archive.toArray();
-  }
-
 }
 
-export default ContentText;
+export default ContentContext;

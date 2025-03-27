@@ -1,3 +1,4 @@
+import ContentContext from "./content.text.model.js";
 import Stack from "./stack.model.js";
 
 class Transaction {
@@ -23,7 +24,7 @@ class Transaction {
     this.shipping_address_id = shipping_address_id; // References the shipping address
     this.billing_address_id = billing_address_id || shipping_address_id; // Defaults to shipping address if not provided
     this.products = products || []; // Array of shopping cart items
-    this.tracking_status = tracking_status || new Stack(); // Stack of tracking status objects
+    this.tracking_status = new ContentContext(tracking_status) || new Stack(); // Stack of tracking status objects
     this.messages = messages || []; // Array of message objects associated with the transaction
   }
 

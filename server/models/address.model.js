@@ -1,6 +1,8 @@
 class Address {
   constructor(
     address_id,
+    house_number,
+    apt_number,
     street,
     city,
     state,
@@ -8,6 +10,8 @@ class Address {
     country,
     isDefault
   ) {
+    this.house_number = house_number;
+    this.apt_number = apt_number;
     this.address_id = address_id; // Unique identifier for the address
     this.street = street; // Street name and number
     this.city = city; // City name

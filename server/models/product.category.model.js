@@ -1,3 +1,4 @@
+import ContentContext from "./content.text.model.js";
 
 const ProductCategoryEnum = Object.freeze({
   ELECTRONICS: 'Electronics',
@@ -22,7 +23,7 @@ class ProductCategory {
 
     this.category_id = category_id; // Primary Key: Unique identifier for the category
     this.category_name = category_name; // Name of the category
-    this.description = description; // Detailed description of the category
+    this.description = new ContentContext(description); // Detailed description of the category
   }
 
   // Method to update category details

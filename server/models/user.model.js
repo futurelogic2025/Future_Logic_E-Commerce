@@ -1,3 +1,6 @@
+import { forEach, values } from "lodash";
+import Stack from "./stack.model.js";
+
 const UserRoleEnum = Object.freeze({
   CUSTOMER: 'customer',
   VENDOR: 'vendor',
@@ -15,8 +18,8 @@ class User {
     role,
     shopping_cart = [],
     transactions = [],
-    addresses = [],
-    payment_methods = [],
+    address,
+    payment_method,
     privileges = {},
     messages = []
   ) {
@@ -33,10 +36,43 @@ class User {
     this.role = role; // Enum (customer, vendor, administrator)
     this.shopping_cart = shopping_cart; // Array of product objects
     this.transactions = transactions; // Array of transaction IDs
-    this.addresses = addresses; // Array of address objects
-    this.payment_methods = payment_methods; // Array of payment method objects
+    this.addresses = new this.#_Collection(address); // Collection of address objects
+    this.payment_methods = new this.#_Collection(payment_method); // Collection of payment method objects
     this.privileges = privileges; // JSON object containing multiple privilege objects
     this.messages = messages; // Array of message objects (sent and received)
+    
+  }
+
+  #_Collection = class Collection {
+    constructor(parameter = "") {
+      this.default = parameter;
+      this.archive = new Stack();
+      if (parameter) this.archive.push(this.default);
+    }
+
+    update(newdefault){    
+      for(const value of [newdefault, this.default]){
+        if (!this.#_isArchived(value)) this.archive.push(value);
+      }
+      this.default = newdefault;
+    }
+
+    #_isArchived(parameter){
+      return this.archive.toArray().includes(parameter);
+    }
+
+    addAll(arrayOfAddresses){
+      for(const address of arrayOfAddresses) this.add(address);
+    }
+
+    add(parameter){
+      if (!this.#_isArchived(parameter)) this.archive.push(parameter);
+    }
+
+    asArray() {
+      return this.archive.toArray().includes(this.latest) ? this.archive.toArray() : [ ...this.archive.toArray(), this.latest ];
+    }
+
   }
 
   // Method to update user details
@@ -72,7 +108,7 @@ class User {
   setDefaultAddress(address_id) {
     this.addresses = this.addresses.map(address => ({
       ...address,
-      isDefault: address.address_id === address_id,
+      isDefault: address.address_id === address,
     }));
   }
 
@@ -85,7 +121,7 @@ class User {
   setDefaultPaymentMethod(payment_id) {
     this.payment_methods = this.payment_methods.map(payment => ({
       ...payment,
-      isDefault: payment.payment_id === payment_id,
+      isDefault: payment.payment_id === payment,
     }));
   }
 

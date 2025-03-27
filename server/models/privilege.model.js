@@ -1,4 +1,4 @@
-import ContentText from './content.text.model.js';
+import ContentContext from './content.text.model.js';
 
 
 /*
@@ -37,7 +37,7 @@ class Privilege {
 
     this.privilege = privilege; // Name or identifier of the privilege
     this.isGranted = isGranted; // Boolean: true if granted, false if revoked
-    this.description = ContentText(description); // Description of the privilege with versioning
+    this.description = new ContentContext(description); // Description of the privilege with versioning
     this.granted_by = granted_by; // user_id of the admin or business granting the privilege
     this.granted_at = granted_at; // Date and time when the privilege was granted
   }

@@ -1,5 +1,5 @@
 import { firestore as _firestore } from '../firebase/firebaseConfig';
-import ContentText from './content.text.model.js';
+import ContentContext from './content.text.model.js';
 
 class Review {
   constructor(
@@ -16,7 +16,7 @@ class Review {
     this.vendor_id = vendor_id; // Foreign Key: Links to Users table (for vendor reviews)
     this.product_id = product_id; // Foreign Key: Links to Products table (for product reviews)
     this.rating = rating; // Integer: Rating value (1 to 5 stars)
-    this.comment = ContentText(comment); // Text feedback with versioning
+    this.comment = new ContentContext(comment); // Text feedback with versioning
     this.review_date = review_date; // Date and time when the review was posted
   }
 
