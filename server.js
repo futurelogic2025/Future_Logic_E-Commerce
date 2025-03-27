@@ -40,11 +40,6 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to User application." });
 });
 
-// // Catch-all route for undefined routes
-// app.use((req, res) => {
-//     res.redirect('/');
-// });
-
 // API Routes
 const apiVersion = "apiv1.0.0";
 
@@ -54,6 +49,11 @@ app.use(`/${apiVersion}/transactions`, transactionRoutes);
 app.use(`/${apiVersion}/messages`, messageRoutes);
 app.use(`/${apiVersion}/reviews`, reviewRoutes);
 app.use(`/${apiVersion}/products`, productRoutes);
+
+// Catch-all route for undefined routes
+app.use((req, res) => {
+  res.redirect('/');
+});
 
 
 //testing firebase
