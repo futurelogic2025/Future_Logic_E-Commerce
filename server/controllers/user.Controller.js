@@ -1,5 +1,6 @@
 import { verifyPassword, generateJwtToken } from './auth.Controller.js';
 import gDB from '../config/firebaseConfig.js';
+import { hashPassword } from "./auth.Controller.js"
 
 // Reference Firestore
 const firestore = gDB.db;
@@ -38,12 +39,18 @@ export async function signIn(req, res) {
 export async function createUser(req, res) {
   try {
     // Step 1: Generate a unique user ID from Firebase Auth
-    const { email, password, ...userData } = req.body; // Separate email and password for Firebase Auth
-    const userRecord = await auth().createUser({ email, password });
+    req.body.password = hashPassword(req.body.password);
+    // const { email, password, ...userData } = req.body; // Separate email and password for Firebase Auth
+    // const userRecord = await gDB.admin.auth().createUser({ email, password : });
+
+     // Generate a unique transaction ID (use Firestore document ID)
+     const userInitRef = firestore.collection('users').doc();
+     const user_id = userInitRef.id;
 
     // Step 2: Include the generated user_id in the user object
-    const user_id = userRecord.uid;
-    const completeUserData = { ...userData, user_id };
+    // const user_id = userRecord.uid;
+    // const completeUserData = { ...userData, user_id };
+    const completeUserData = { ...req.body, user_id };
 
     // Step 3: Add the user object to Firestore
     const userRef = await firestore.collection('users').doc(user_id).set(completeUserData);

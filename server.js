@@ -40,10 +40,10 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to User application." });
 });
 
-// Catch-all route for undefined routes
-app.use((req, res) => {
-    res.redirect('/');
-});
+// // Catch-all route for undefined routes
+// app.use((req, res) => {
+//     res.redirect('/');
+// });
 
 // API Routes
 app.use('/auth', authRoutes);
