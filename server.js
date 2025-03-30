@@ -4,6 +4,7 @@ import app from "./server/express.js";
 import { join } from "path";
 import __dirname from "./server/_dirname.js";
 import template from './public/template.js';
+import { env } from 'node:process';
 
 // Import routes
 import authRoutes from './server/routes/auth.Routes.js';
@@ -41,14 +42,14 @@ app.get("/", (req, res) => {
 });
 
 // API Routes
-const apiVersion = "apiv1.0.0";
+const apiVersionOne = "apiV1.0.0" || env.API_VERSION_V_ONE;
 
-app.use(`/${apiVersion}/auth`, authRoutes);
-app.use(`/${apiVersion}/users`, userRoutes);
-app.use(`/${apiVersion}/transactions`, transactionRoutes);
-app.use(`/${apiVersion}/messages`, messageRoutes);
-app.use(`/${apiVersion}/reviews`, reviewRoutes);
-app.use(`/${apiVersion}/products`, productRoutes);
+app.use(`/${apiVersionOne}/auth`, authRoutes);
+app.use(`/${apiVersionOne}/users`, userRoutes);
+app.use(`/${apiVersionOne}/transactions`, transactionRoutes);
+app.use(`/${apiVersionOne}/messages`, messageRoutes);
+app.use(`/${apiVersionOne}/reviews`, reviewRoutes);
+app.use(`/${apiVersionOne}/products`, productRoutes);
 
 // Catch-all route for undefined routes
 app.use((req, res) => {

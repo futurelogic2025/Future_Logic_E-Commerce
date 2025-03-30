@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
-// dot env config
-dotenv.config()
+import dotenv from "dotenv";// dot env config
+dotenv.config();
+
 const config = {
     env: process.env.NODE_ENV || 'development', 
     port: process.env.PORT || 3000,
