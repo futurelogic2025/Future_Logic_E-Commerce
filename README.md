@@ -38,7 +38,7 @@ This project is a comprehensive platform designed to manage users, transactions,
 
 ## Technologies Used
 
-- **Backend Framework**: Node.js
+- **Backend Framework**: Node.js and Express
 - **Database**: Firebase Firestore
 - **Validation**: Joi
 - **Authentication**: JWT
