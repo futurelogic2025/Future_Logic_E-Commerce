@@ -113,3 +113,169 @@ const productSample = {
   "category_id": "Electronics",
   "business_id": "b123"
 };
+
+/*
+{
+  "users": {
+    "create": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "password": "password123",
+      "role": "customer"
+    },
+    "update": {
+      "name": "Jane Doe"
+    }
+  },
+  "transactions": {
+    "create": {
+      "user_id": "customer123",
+      "vendor_id": "vendor456",
+      "products": [
+        {
+          "product_id": "prod789",
+          "quantity": 2
+        }
+      ],
+      "total_amount": 50,
+      "shipping_address_id": "addr123"
+    },
+    "update": {
+      "status": "completed"
+    }
+  },
+  "reviews": {
+    "create": {
+      "user_id": "customer123",
+      "product_id": "prod789",
+      "rating": 5,
+      "comment": "Amazing product! Highly recommended."
+    },
+    "update": {
+      "comment": "Updated feedback. Still love the product!"
+    }
+  },
+  "products": {
+    "create": {
+      "name": "Sample Product",
+      "description": {
+        "text": "This is a sample product description.",
+        "images": [
+          "http://example.com/image1.jpg",
+          "http://example.com/image2.jpg"
+        ]
+      },
+      "price": 20,
+      "stock_quantity": 100,
+      "category_id": "cat123",
+      "business_id": "vendor456"
+    },
+    "update": {
+      "price": 25,
+      "stock_quantity": 120
+    }
+  },
+  "messages": {
+    "create": {
+      "transaction_id": "trans123",
+      "sender_id": "customer123",
+      "receiver_id": "vendor456",
+      "content": "Hello! Can I get an update on my order status?"
+    },
+    "update": {
+      "content": "Updated message content. Please disregard the earlier message."
+    }
+  }
+}
+
+*/
+
+/*
+{
+  "users": {
+    "create": {
+      "name": "John Doe",
+      "email": "john@example.com",
+      "password": "password123",
+      "role": "customer"
+    },
+    "update": {
+      "name": "Jane Doe",
+      "email": "jane.doe@example.com" // Optional fields for user updates
+    }
+  },
+  "transactions": {
+    "create": {
+      "user_id": "customer123",
+      "vendor_id": "vendor456",
+      "products": [
+        {
+          "product_id": "prod789",
+          "quantity": 2
+        },
+        {
+          "product_id": "prod101",
+          "quantity": 1
+        }
+      ],
+      "total_amount": 75, // Updated to reflect multiple products
+      "shipping_address_id": "addr123",
+      "billing_address_id": "addr124"
+    },
+    "update": {
+      "status": "completed" // Example update for a transaction's status
+    }
+  },
+  "reviews": {
+    "create": {
+      "user_id": "customer123",
+      "product_id": "prod789",
+      "rating": 5,
+      "comment": "Amazing product! Highly recommended.",
+      "vendor_id": "vendor456" // Added vendor_id for context
+    },
+    "update": {
+      "comment": "Updated feedback. Still love the product!",
+      "rating": 4 // Optionally update the rating
+    }
+  },
+  "products": {
+    "create": {
+      "name": "Sample Product",
+      "description": {
+        "text": "This is a sample product description.",
+        "images": [
+          "http://example.com/image1.jpg",
+          "http://example.com/image2.jpg"
+        ]
+      },
+      "price": 20,
+      "stock_quantity": 100,
+      "category_id": "cat123",
+      "business_id": "vendor456",
+      "reorder_threshold": 10 // Added reorder threshold for stock management
+    },
+    "update": {
+      "price": 25,
+      "stock_quantity": 120,
+      "reorder_threshold": 15 // Example update for stock management
+    }
+  },
+  "messages": {
+    "create": {
+      "transaction_id": "trans123",
+      "sender_id": "customer123",
+      "receiver_id": "vendor456",
+      "content": "Hello! Can I get an update on my order status?"
+    },
+    "update": {
+      "content": "Updated message content. Please disregard the earlier message."
+    },
+    "markAsRead": {
+      "transaction_id": "trans123",
+      "receiver_id": "vendor456"
+    }
+  }
+}
+
+*/

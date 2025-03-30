@@ -107,18 +107,31 @@ export async function getAllReviews(req, res) {
 // -----------------------------------------------------------------------------------------------------------
 /*
 import gDB from '../config/firebaseConfig.js';
+import Joi from 'joi';
 import Review from '../models/review.model.js';
 
 // Reference Firestore
 const firestore = gDB.db;
 
-// Create a new review (Customers only)
+// Joi schema for reviews
+const reviewSchema = Joi.object({
+  vendor_id: Joi.string().required(), // Vendor being reviewed
+  product_id: Joi.string().required(), // Product being reviewed
+  rating: Joi.number().integer().min(1).max(5).required(), // Rating: 1 to 5 stars
+  comment: Joi.string().max(500).required(), // Comment with a max length of 500 characters
+});
+
+// Create a new review
 export async function createReview(req, res) {
   try {
     // Validate privileges
     if (req.user.role !== 'customer' || !req.user.privileges.shopping?.isGranted) {
       return res.status(403).send({ message: 'Forbidden: Insufficient privileges to create a review.' });
     }
+
+    // Validate user input
+    const { error } = reviewSchema.validate(req.body);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     const { vendor_id, product_id, rating, comment } = req.body;
 
@@ -132,7 +145,7 @@ export async function createReview(req, res) {
     // Initialize a new Review instance
     const review = new Review(
       reviewId,
-      req.user.user_id, // Link the review to the customer
+      req.user.user_id,
       vendor_id,
       product_id,
       rating,
@@ -149,7 +162,7 @@ export async function createReview(req, res) {
   }
 }
 
-// Get a specific review by ID
+// Get a specific review
 export async function getReview(req, res) {
   try {
     const reviewId = req.params.id;
@@ -161,7 +174,6 @@ export async function getReview(req, res) {
 
     const reviewData = reviewDoc.data();
 
-    // Restrict access to reviews based on roles
     if (req.user.role === 'customer' && reviewData.user_id !== req.user.user_id) {
       return res.status(403).send({ message: 'Forbidden: You can only access your own reviews.' });
     } else if (req.user.role === 'vendor' && reviewData.vendor_id !== req.user.user_id) {
@@ -174,11 +186,19 @@ export async function getReview(req, res) {
   }
 }
 
-// Update a review's details by ID
+// Update a review
 export async function updateReview(req, res) {
   try {
     const reviewId = req.params.id;
     const updates = req.body;
+
+    // Make fields optional for updates
+    const updateSchema = reviewSchema.fork(Object.keys(reviewSchema.describe().keys), (field) =>
+      field.optional()
+    );
+
+    const { error } = updateSchema.validate(updates);
+    if (error) return res.status(400).send({ message: error.details[0].message });
 
     const reviewRef = firestore.collection('reviews').doc(reviewId);
     const reviewDoc = await reviewRef.get();
@@ -189,14 +209,12 @@ export async function updateReview(req, res) {
 
     const reviewData = reviewDoc.data();
 
-    // Restrict updates to the customer who created the review or administrators
     if (req.user.role === 'customer' && reviewData.user_id !== req.user.user_id) {
       return res.status(403).send({ message: 'Forbidden: You can only update your own reviews.' });
     } else if (req.user.role !== 'administrator' && req.user.role !== 'customer') {
       return res.status(403).send({ message: 'Forbidden: Insufficient privileges to update reviews.' });
     }
 
-    // Save the updated review to Firestore
     await reviewRef.update(updates);
 
     res.status(200).send({ message: 'Review updated successfully.' });
@@ -205,7 +223,7 @@ export async function updateReview(req, res) {
   }
 }
 
-// Delete a review by ID
+// Delete a review
 export async function deleteReview(req, res) {
   try {
     const reviewId = req.params.id;
@@ -219,14 +237,12 @@ export async function deleteReview(req, res) {
 
     const reviewData = reviewDoc.data();
 
-    // Restrict deletion to the customer who created the review or administrators
     if (req.user.role === 'customer' && reviewData.user_id !== req.user.user_id) {
       return res.status(403).send({ message: 'Forbidden: You can only delete your own reviews.' });
     } else if (req.user.role !== 'administrator' && req.user.role !== 'customer') {
       return res.status(403).send({ message: 'Forbidden: Insufficient privileges to delete reviews.' });
     }
 
-    // Delete the review
     await reviewRef.delete();
 
     res.status(200).send({ message: 'Review deleted successfully.' });
@@ -235,7 +251,7 @@ export async function deleteReview(req, res) {
   }
 }
 
-// Get all reviews (Admins can access all; vendors can filter by their products)
+// Get all reviews
 export async function getAllReviews(req, res) {
   try {
     const reviewSnapshot = await firestore.collection('reviews').get();
@@ -245,13 +261,12 @@ export async function getAllReviews(req, res) {
     }
 
     const reviews = [];
-    reviewSnapshot.forEach(doc => {
+    reviewSnapshot.forEach((doc) => {
       reviews.push(doc.data());
     });
 
-    // Filter reviews based on roles
     if (req.user.role === 'vendor') {
-      const vendorReviews = reviews.filter(review => review.vendor_id === req.user.user_id);
+      const vendorReviews = reviews.filter((review) => review.vendor_id === req.user.user_id);
       return res.status(200).send(vendorReviews);
     } else if (req.user.role !== 'administrator') {
       return res.status(403).send({ message: 'Forbidden: Insufficient privileges to view all reviews.' });
@@ -262,6 +277,7 @@ export async function getAllReviews(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+
 
 
 */
